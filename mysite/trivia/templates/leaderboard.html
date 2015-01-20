@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+<link type="text/css" rel="stylesheet" href="{% static 'leaderboardsheet.css' %}" />
+<head>
+   <title> Leaderboard </title>
+</head>
+
+<body>
+   <div id="header"><h1>Miner Village Trivia Challenge</h1></div>
+   <h2> Leaderboard </h2>
+   
+   <table align="left" style="width:100%">
+     <tr>
+        <th align="center">Username</th>
+        <th align="center">Total Points</th>
+     </tr>
+
+ <!--  for every user in database, display their user name and points in descending order  -->
+   
+   {% for x in user_list %}
+     <tr>
+        <td><a href = "{% url 'trivia:profile' x.user.id %}">{{ x.user.username }}</a></td>
+        <td>{{ x.num_correct }}</td>
+     </tr>
+   {% endfor %}
+   </table>
+</body>
+
+</head>
+</html>

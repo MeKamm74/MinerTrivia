@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+{% load staticfiles %}
+<link type="text/css" rel="stylesheet" href="{% static 'dailyquestionsheet.css' %}" />
+
+<head>
+   <title> Daily Question </title>
+</head>
+
+<body>
+   <div id="header"><h1>Miner Village Trivia Challenge</h1></div>
+   <h2> Question for {{ date }} </h2>
+   <!--
+   (% if answer==Null: %) -->
+
+
+   <h3> {{ question_text }} </h3>
+
+   <form action="/results/" method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <br><br>
+    <input type="submit" value="Submit" />
+   </form>
+   <!-- 
+   (% else:
+     print "You've already answered today's question.
+     Come back tomorrow for another question"
+     %) -->
+     
+   <br>
+   <p>
+      Check the <a href="{% url 'trivia:leader' %}">Leaderboard</a>
+   </p>
+</body>
+
+</head>
+</html>
