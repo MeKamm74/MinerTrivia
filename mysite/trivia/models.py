@@ -15,7 +15,7 @@ class Question(models.Model):
 		return self.question_text
 
 class MyUser(models.Model):
-	user = models.OneToOneField(User)
+	user = models.OneToOneField(User, primary_key=True)
 	num_correct = models.IntegerField(default=0)
 	num_total = models.IntegerField(default=0)
 

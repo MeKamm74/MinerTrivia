@@ -13,7 +13,7 @@
 
    {% if registered %}
    <br/>Thank you for registering!
-   <a href='/trivia/daily'> Go to daily question </a>
+   <a href='{% url 'trivia:daily' %}'> Go to daily question </a>
   
    {% else %}
    <br/>Register here!

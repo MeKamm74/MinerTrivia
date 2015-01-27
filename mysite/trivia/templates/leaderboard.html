@@ -20,7 +20,7 @@
    
    {% for x in user_list %}
      <tr>
-        <td><a href = "{% url 'trivia:profile' x.user.id %}">{{ x.user.username }}</a></td>
+        <td><a href = "{% url 'trivia:profile' x.user.id %}"> {{ x.user.username }}</a></td>
         <td>{{ x.num_correct }}</td>
      </tr>
    {% endfor %}

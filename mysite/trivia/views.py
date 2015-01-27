@@ -19,43 +19,57 @@ class AnswerForm(forms.Form):
 def dailyview(request):
 	if not request.user.is_authenticated():
 		return redirect('/trivia/')
-
 	date = timezone.now().date()
 	q = get_object_or_404(Question, pk=date)
 	q_text = q.question_text
+	userid = request.user.id
+	user = get_object_or_404(MyUser, pk=request.user)
+
 	if request.method == 'POST':
 		form = AnswerForm(request.POST)
 		if form.is_valid():
-			return HttpResponseRedirect('results.html')
+			answer_given = request.POST['answer']
+			if answer_given == q.answer_text:
+				user.num_correct += 1
+				user.num_total = user.num_total + 1
+				user.save()
+				return HttpResponseRedirect('/trivia/correctResults/')
+			else:
+				user.num_total = user.num_total + 1
+				user.save()
+				return HttpResponseRedirect('/trivia/incorrectResults/')
 		else:
 			form = AnswerForm()
 	else:
 		form = AnswerForm()
-	return render(request, 'dailyquestion.html', {'date': date, 'question_text': q_text, 'form': form})
+	return render(request, 'dailyquestion.html', {'date': date, 'question_text': q_text, 'form': form, 'user': user})
 
-def resultsview(request, answer, question):
-	flag = False
-	if answer == question.answer_text:
-		flag = True
+def correctResultsView(request):
+	userid = request.user.id
+	user = get_object_or_404(MyUser, pk=userid)
+	date = timezone.now().date()
+	q = get_object_or_404(Question, pk=date)
 
-	#if flag == True:
-		#request.user.
-	return render(request, 'results.html', {'flag': flag})
+	return render(request, 'correctResults.html', {'user': user, 'question': q})
+
+def incorrectResultsView(request):
+	userid = request.user.id
+	user = get_object_or_404(MyUser, pk=userid)
+	date = timezone.now().date()
+	q = get_object_or_404(Question, pk=date)
+
+	return render(request, 'incorrectResults.html', {'user': user, 'question': q})
 
 class leaderview(generic.ListView):
-
 	model = MyUser
 	template_name = "leaderboard.html"
 	context_object_name = 'user_list'
 
 	def get_queryset(self):
-		if not self.request.user.is_authenticated():
-			return redirect('/trivia/')
 		"""Return the last five published questions."""
-		return MyUser.objects.order_by('-num_total')
+		return MyUser.objects.order_by('-num_correct')
 
 def profileview(request, userid):
-	model = MyUser
 	template_name = "profile.html"
 	context_object_name = 'user'
 	user = get_object_or_404(MyUser, pk=userid)
@@ -101,6 +115,8 @@ def register(request):
 			user = user_form.save()
 			user.set_password(user.password)
 			user.save()
+			my_user = MyUser(user=user)
+			my_user.save()
 			registered = True
 		else:
 			print user_form.errors
