@@ -9,26 +9,35 @@
 </head>
 
 <body>
-   <div id="header"><h1>Miner Village Trivia Challenge</h1></div>
+  <div>
+   <table id="header">
+     <tr>
+      <th colspan="4"><h1>Miner Village Trivia Challenge</h1></th>
+     </tr>
+     <tr>
+       <td><a href="{% url 'trivia:about' %}">About Us</a></td>
+       <td><a href="{% url 'trivia:profile' user.user.id %}">Your Profile</a></td>
+       <td><a href="{% url 'trivia:leader' %}">Leaderboard</a></td>
+       <td><a href="{% url 'trivia:logout' %}">Logout</a></td>
+     </tr>
+   </table></div>
    <h2> Question for {{ date }} </h2>
-   <!--
-   (% if answer==Null: %) -->
+   
+   {% if not user.last_answered == date %}
+      <h3> {{ question_text }} </h3>
 
+      <form action="/trivia/daily/" method="POST">
+      {% csrf_token %}
+      {{ form }}
+      <br><br>
+      <input type="submit" value="Submit" />
+      </form>
+    
+   {% else %}
+      <h3> You have already answered the Question for today. </h3>
+      <h3> Come back tomorrow! </h3>
+   {% endif %}
 
-   <h3> {{ question_text }} </h3>
-
-   <form action="/results/" method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <br><br>
-    <input type="submit" value="Submit" />
-   </form>
-   <!-- 
-   (% else:
-     print "You've already answered today's question.
-     Come back tomorrow for another question"
-     %) -->
-     
    <br>
    <p>
       Check the <a href="{% url 'trivia:leader' %}">Leaderboard</a>

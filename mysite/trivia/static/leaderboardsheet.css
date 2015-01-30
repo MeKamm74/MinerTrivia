@@ -15,13 +15,13 @@ h2{
    text-align: center;
 }
 
-table{
+#board{
    text-align: left;
    border: 1pt solid black;
    border-collapse: collapse;
 }
 
-th,td{
+#board th, #board td{
    padding: 10pt;
    border: 1pt solid black;
 }

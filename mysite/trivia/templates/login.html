@@ -8,7 +8,15 @@
 </head>
 
 <body>
-   <div id="header"><h1>Miner Village Trivia Challenge</h1></div>
+  <div>
+   <table id="header">
+     <tr>
+      <th><h1>Miner Village Trivia Challenge</h1></th>
+     </tr>
+     <tr>
+       <td><a href="{% url 'trivia:about' %}">About Us</a></td>
+    </tr>
+  </table></div>
    <h2> Login </h2>
    
    <form id="login_form" method="post" action="/trivia/">
